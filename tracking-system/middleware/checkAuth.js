@@ -8,7 +8,6 @@ module.exports = (req, res, next) => {
         const decoded = jwt.verify(token, JWT_SECRET);
         req.userData = decoded;
         let {email} = decoded;
-        console.log("decoded",decoded);
 
         User.find( {email} )
         .exec()

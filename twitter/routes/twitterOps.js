@@ -1,11 +1,5 @@
 const express = require("express");
 const router = express.Router();
-// const mongoose = require("mongoose");
-// const bcrypt = require("bcrypt");
-// const jwt = require("jsonwebtoken");
-// const { JWT_SECRET,bcrypt_hash } = require('../config/secret.json');
-
-// const twitterOps = require("../models/twitterOps");
 const twitterOpsController = require('../controllers/twitterOps');
 const checkAuth = require('../middleware/checkAuth');
 
