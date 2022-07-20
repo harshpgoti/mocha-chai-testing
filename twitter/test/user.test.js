@@ -2,35 +2,52 @@ const chai = require('chai');
 const {expect, assert} = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose  = require('mongoose');
-const request = require('supertest');
+const { faker } = require('@faker-js/faker');
 
-
-const app = require('../../app');
-const { JWT_SECRET,bcrypt_hash,mongoose_url } = require('../../config/secret.json');
+const app = require('../app');
 
 chai.should();
 chai.use(chaiHttp);
 
 describe('/user ', () => {
 
-    it('/signup - should crete new user', (done) => {
-        const user = {
-            "email": 'test@test.com',
-            "password": "test",
-            "name":"test user"
+    it('/signup - should crete new user if email not found', (done) => {
+        let user = {
+            "email": faker.internet.email(),
+            "password": faker.internet.password(),
+            "name":faker.internet.userName()
         }
-        request(app).post('/user/signup')
+        chai.request(app).post('/user/signup')
         .send(user)
         .then((res)=>{
             const body = res.body;
-            expect(res.status).to.equal(201)
+            expect(res.status).to.equal(200)
             expect(body).to.contain.property('message');
             done();
         })
         .catch((err) => {
-            done()
+            done(err)
         });
     });
+
+    it('/signup - should return 403 if email was found', () => {
+        let user = {
+            "email": 'harshgoti@goti.com',
+            "password": 'harshgoti',
+            "name":'harshgoti'
+        }
+        chai.request(app).post('/user/signup')
+        .send(user)
+        .then((res)=>{
+            expect(res.error.status).to.equal(403);
+            expect(res.error.response.text).to.equal('{"error":"Mail exists"}');
+            done();
+        })
+        .catch((err) => {
+            done(err)
+        });
+        
+      });
 
     it('/signup - check requires fields', (done) => {
         const user = {
@@ -38,7 +55,7 @@ describe('/user ', () => {
             "password": "test",
             "name":"test user"
         }
-        request(app).post('/user/signup')
+        chai.request(app).post('/user/signup')
         .send(user)
         .then((res)=>{
             const body = res.body;
@@ -47,7 +64,7 @@ describe('/user ', () => {
             done();
         })
         .catch((err) => {
-            done()
+            done(err)
         });
     });
 
@@ -56,7 +73,7 @@ describe('/user ', () => {
             "email": "harshgoti@goti.com",
             "password":"harshgoti"
         }
-        request(app).post('/user/signin')
+        chai.request(app).post('/user/signin')
         .send(user)
         .then((res)=>{
             const body = res.body;
@@ -66,7 +83,7 @@ describe('/user ', () => {
             done();
         })
         .catch((err) => {
-            done()
+            done(err)
         });
     });
 
@@ -75,7 +92,7 @@ describe('/user ', () => {
             "email": "harshgoti@goti.com",
             "password":""
         }
-        request(app).post('/user/signup')
+        chai.request(app).post('/user/signup')
         .send(user)
         .then((res)=>{
             const body = res.body;
@@ -84,7 +101,7 @@ describe('/user ', () => {
             done();
         })
         .catch((err) => {
-            done()
+            done(err)
         });
     });
     

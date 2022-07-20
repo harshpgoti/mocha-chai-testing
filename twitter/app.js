@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require("mongoose");
 const userRoutes = require('./routes/user');
+const twitterOps = require('./routes/twitterOps');
 const { mongoose_url } = require('./config/secret.json');
 
 const app = express();
@@ -29,5 +30,6 @@ app.get('/',(req,res)=>{
 });
 
 app.use("/user", userRoutes);
+app.use("/twitterOps", twitterOps);
 
 module.exports = app;
