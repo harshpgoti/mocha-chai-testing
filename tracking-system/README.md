@@ -9,8 +9,6 @@ URL:  http://localhost:3000/
 APIs:
 1. User login 
 http://localhost:3000/user/signin
-(email: harshgoti@goti.com, password: harshgoti
-email: test@test.com, password: test)
 
 In this API send login credential in body.
 It will return token.
